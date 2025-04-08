@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I2P</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="png" href="favicon.png">
+</head>
+
+<body>
+    <div id="bloqueio" class="bloqueio"></div>
+    <div class="sidebar">
+        <p class="title">ChatGPT <img class="imgTitle" src="imgs/iconSetaBaixo.png" alt=""></p>
+        <div class="content1">
+            <img class="img1" src="imgs/icon1.png" alt="">
+            <img src="imgs/icon2.png" alt="">
+            <img src="imgs/icon3.png" alt="">
+        </div>
+        <div class="content2">
+            <p><button class="buttonImgContent2"><img class="imgContent2" src="imgs/iconChat.png" alt="">
+                </button>ChatGPT</p>
+            <p><button class="buttonImgContentPoint2"><img class="imgContent2" src="imgs/iconPoints.png"
+                        alt=""></button>Explorar GPTs</p>
+        </div>
+        <div class="content3">
+            <p class="dia">Hoje</p>
+            <p class="chatAberto">I2P <img class="imgChatPoints" src="imgs/icon3Points.png" alt=""></p>
+        </div>
+        <div class="contentCenter">
+            <div class="content4">
+                <p class="upgradeInfo"><button class="buttonImgContent4"><img class="imgContent4"
+                            src="imgs/iconEstrelas.png" alt=""></button>Fazer upgrade do plano <br>
+                <p class="info">Mais acesso aos melhores...</p>
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="content">
+        <ul id="mensagens"></ul>
+
+        <form>
+            <div class="input-container">
+                <div id="cadastro">
+                    <p>Que bom que você voltou</p>
+                    <input id="nome" placeholder="Nome de usuário" autocomplete="off" /><br>
+                    <button class="button">Continuar</button>
+                </div>
+
+                <input id="mensagem" placeholder="Pergunte alguma coisa" autocomplete="off" />
+                <p class="adicionar">+</p>
+                <p class="buscar"><img src="imgs/iconBuscar.png" alt=""> Buscar</p>
+                <p class="refletir"><img src="imgs/iconLampada.png" alt=""> Refletir</p>
+                <p class="points"><img src="imgs/icon3Points.png" alt=""></p>
+                <button class="button"><img class="buttonEnviar" src="imgs/iconEnviar.png" alt=""></button>
+            </div>
+
+        </form>
+    </div>
+    <!-- Importa o script do Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const nomeInput = document.getElementById('nome');
+        const mensagemInput = document.getElementById('mensagem');
+        const mensagens = document.getElementById('mensagens');
+        var cadastro = document.getElementById('cadastro');
+        var block = document.getElementById('bloqueio');
+        const conversa = document.getElementById('conversa');
+        nomeInput.focus()
+
+        document.querySelector('form').addEventListener('submit', event => {
+            var nome = document.getElementById('nome').value
+            nome = nomeInput.value.trim();
+            if (nome == "") {
+                alert("Digite um nome válido")
+                return
+            } else {
+                event.preventDefault();
+                const nome = nomeInput.value;
+                const mensagem = mensagemInput.value;
+                nome.trim() && mensagem.trim() && socket.emit('chat message', { nome, mensagem });
+                mensagemInput.value = '';
+                nomeInput.disabled = true;
+                cadastro.style.display = "none";
+                block.style.display = "none";
+                mensagemInput.focus();
+            }
+        });
+
+        socket.on('chat message', dados => {
+            cadastro.style.display = "none";
+            const lista = document.createElement('h6');
+            lista.textContent = `${dados.nome}: ${dados.mensagem}`;
+            mensagens.appendChild(lista);
+
+            lista.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        });
+
+    </script>
+</body>
+
+</html>
