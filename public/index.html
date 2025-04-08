@@ -92,7 +92,6 @@
         });
 
         socket.on('chat message', dados => {
-            cadastro.style.display = "none";
             const lista = document.createElement('h6');
             lista.textContent = `${dados.nome}: ${dados.mensagem}`;
             mensagens.appendChild(lista);
