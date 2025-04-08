@@ -211,6 +211,7 @@ body {
     padding: 10px;
     transition: 0.1s;
     width: 269.02px;
+    cursor: pointer;
 }
 
 .content4:hover {
