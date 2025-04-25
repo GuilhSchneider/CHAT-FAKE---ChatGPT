@@ -93,7 +93,7 @@
 
         socket.on('chat message', dados => {
             const lista = document.createElement('h6');
-            lista.textContent = `${dados.nome}: ${dados.mensagem}`;
+            lista.innerHTML = `${dados.nome}: ${dados.mensagem}`;
             mensagens.appendChild(lista);
 
             lista.scrollIntoView({ behavior: 'smooth', block: 'end' });
